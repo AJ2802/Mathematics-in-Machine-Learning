@@ -1,0 +1,221 @@
+%% LyX 2.2.3 created this file.  For more info, see http://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[oneside,reqno]{amsart}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\pagestyle{plain}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{esint}
+\usepackage[numbers]{natbib}
+\usepackage[unicode=true,pdfusetitle,
+ bookmarks=true,bookmarksnumbered=false,bookmarksopen=false,
+ breaklinks=false,pdfborder={0 0 1},backref=section,colorlinks=false]
+ {hyperref}
+
+\makeatletter
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+%2multibyte Version: 5.50.0.2960 CodePage: 1250
+% **********************************************************************************************
+%\usepackage[notcite]{showkeys}
+%\usepackage{graphicx}
+%\usepackage{amscd}
+%\usepackage{a4}
+%unnumbered theorem environments
+%\iffalse
+%\usepackage[notcite]{showkeys}
+%\usepackage{babel}
+%\usepackage{babel}
+
+
+\usepackage{amsthm}
+\usepackage{mathrsfs}
+%\usepackage[notcite]{showkeys}
+\usepackage{amsthm}
+\usepackage{datetime}
+\usepackage{mathrsfs}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{comment}
+\usepackage{graphicx}\setcounter{MaxMatrixCols}{30}
+%TCIDATA{OutputFilter=latex2.dll}
+%TCIDATA{Version=5.50.0.2960}
+%TCIDATA{Codepage=1250}
+%TCIDATA{CSTFile=amsart.cst}
+%TCIDATA{Created=Wednesday, August 10, 2011 10:30:47}
+%TCIDATA{LastRevised=Tuesday, November 03, 2015 14:08:24}
+%TCIDATA{<META NAME="GraphicsSave" CONTENT="32">}
+%TCIDATA{<META NAME="SaveForMode" CONTENT="1">}
+%TCIDATA{BibliographyScheme=BibTeX}
+%TCIDATA{<META NAME="DocumentShell" CONTENT="Articles\SW\bruce_plain">}
+%TCIDATA{Language=American English}
+%BeginMSIPreambleData
+\providecommand{\U}[1]{\protect\rule{.1in}{.1in}}
+%EndMSIPreambleData
+
+
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+\numberwithin{equation}{section}
+\numberwithin{figure}{section}
+\iffalse
+\oddsidemargin= -0.2in
+\evensidemargin= -0.2in
+\textheight= 9in
+\topmargin= -0.2in
+\textwidth= 6.9in
+\fi
+\theoremstyle{plain}
+\newtheorem{theorem}{}[section]
+\newtheorem{corollary}[theorem]{}\newtheorem{lemma}[theorem]{}\newtheorem{convention}[theorem]{}\newtheorem{mtheorem}[theorem]{}\newtheorem{proposition}[theorem]{}\newtheorem{htheorem}[theorem]{}\newtheorem{axiom}{}\newtheorem{solution}[theorem]{}\newtheorem{summary}[theorem]{}\renewenvironment{proof}[1][Proof]{\textbf{#1.} }{\ \rule{0.5em}{0.5em}}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[theorem]\newtheorem{comments}[theorem]{}\newtheorem{notation}[theorem]{}\newtheorem{notations}[theorem]{}\newtheorem{example}[theorem]{}\theoremstyle{remark}
+\newtheorem{remark}[theorem]{}\newtheorem{remarks}[theorem]{}\newtheorem{fact}[theorem]{}\theoremstyle{plain}
+\newtheorem{conjecture}[]{}\newtheorem{claim}[]{}\newtheorem{computation}[]{}\theoremstyle{definition}
+\newtheorem{assumption}[]{}\newtheorem{exercise}{}[section]
+\numberwithin{equation}{section}
+\newcommand*{\bigchi}{\mbox{\Large$\chi$}}
+\excludecomment{comments}
+
+
+
+
+
+\makeatother
+
+\begin{document}
+
+\title{EM Algorithm}
+
+\author{By Pun Wai Tong }
+
+\date{09/20/17}
+
+\email{punwai.tong@gmail.com}
+
+\maketitle
+\setcounter{section}{-1}
+
+%\newpage
+
+How people do an optimization? Let a function $f:V\rightarrow\mathbb{R}$
+be an objective function. One way to maximize $f$ is to expand the
+domain of $V$ to $V\times H$ and transform $f:V\rightarrow\mathbb{R}$
+to $F:V\times H\rightarrow\mathbb{R}$ such that $F(v,h)\leq f(v)$
+for all $v\in V$ and $h\in H.$ Moreover, given $h\in H,$ the upper
+bound of $F(\cdot,h)$ is assumed to be known and is denoted as $g(v):=\max_{h\in H}F(v,h).$
+Therefore, the lower bound of $f$ can be estimated as 
+\[
+\max_{v\in V}g(v)\leq\max_{v\in V}f(v).
+\]
+Suppose there exists $\left(v_{optimal}\right)=argmax\left(g(\cdot)\right)$
+exists. Heuristically speaking, $f(v_{optimal})$ should not be too
+far from $\max_{v\in V}f(v)$ if an appropriate $F$ is chosen. This
+idea or its variant has been seen very often in optimization area,
+e.g. EM algorithm and Lagrangian dual problem and is very useful in
+other mathematics fields, e.g. the proof of concentration inequality
+in a random graph.
+
+What is a EM algorithm? EM algorithm applies the above idea to maximize
+the likelihood function. Let $T$ be a training set and $S$ be a
+hidden space. Let $P$ be a probability density on $T\times S$ and
+the probability density function $P$ is tuned by a set of parameters
+which is denoted as $\theta$. Note $\theta$ can be viewed as lying
+in a set $V$. And by total law of probability, we define $p(\cdot;\theta):T\rightarrow[0,1]$
+as 
+\begin{equation}
+p(t;\theta):=\sum_{s\in S}p(\cdot,s;\theta).\label{eq:1.1}
+\end{equation}
+The function $p(\cdot;\theta)$ is a probability density function
+on $T.$ The log-likelihood function $\ell$ is formulated as 
+\begin{align*}
+\ell:V & \rightarrow\mathbb{R}\\
+\ell(\theta)= & \sum_{t\in T}log\left(p\left(t;\theta\right)\right).
+\end{align*}
+The log-likelihood function $\ell$ is our objective function for
+maximization and can be viewed as $f$ the above idea. Since a $log$
+function is a concave function, i.e. 
+\begin{equation}
+\sum_{i=1}^{n}w_{i}logt_{i}\leq log\left(\sum_{i=1}^{n}w_{i}t_{i}\right)\label{eq:1.2}
+\end{equation}
+for any $t_{i}>0$ and $w_{i}\geq0$ and $\sum_{i=1}^{n}w_{i}$=1.
+By using Eq. (\ref{eq:1.2}) {[}also known as the concave version
+of Jensen's Inequality{]} and Eq.(\ref{eq:1.1}), the likelihood function
+becomes
+
+\begin{eqnarray}
+\ell(\theta) & = & \sum_{t\in T}log\left(\sum_{s\in S}p(t,s;\theta)\right)\nonumber \\
+ & = & \sum_{t\in T}log\left(\sum_{s\in S}q(s)\frac{p(t,s;\theta)}{q(s)}\right)\nonumber \\
+ & \geq & \sum_{t\in T}\sum_{s\in S}q(s)log\left(\frac{p(t,s;\theta)}{q(s)}\right)\label{eq:1.3}
+\end{eqnarray}
+where $q$ is any arbitrary probability density function on $S$ and
+$q$ can be viewed as lying in $H$. Let $L(\cdot,\cdot)$ be a function
+mapping from $V\times H$ to $\mathbb{R}$ as 
+\[
+L(\theta,q):=\sum_{t\in T}\sum_{s\in S}q(s)log\left(\frac{p(t,s;\theta)}{q(s)}\right)
+\]
+and the function $L$ can be viewed as $F$ in the above idea. Hence,
+\[
+\max_{\theta}\ell(\theta)\geq\max_{\theta}\max_{q}L(\theta,q).
+\]
+The goal of the EM algorithm is to find $\theta_{optimal}$ to maximize
+$max_{q}L(\theta,q)$ and the algorithm is as follows: 
+\begin{enumerate}
+\item Initialize $\theta^{(0)}$ and set $t=0$ 
+\item until nothing change very much, 
+\begin{enumerate}
+\item E-Step: $q^{(t)}=argmax_{q}L(\theta^{(t)},\cdot)$ 
+\item M-Step: $\theta^{(t+1)}=argmax_{\theta}L(\cdot,q^{(t)})$ 
+\end{enumerate}
+\item Return a final estimator of $\theta.$ 
+\end{enumerate}
+In the E-Step, by using Eq.(\ref{eq:1.3}), we have 
+\begin{equation}
+\ell(\theta^{(t)})\geq\sum_{t\in T}\sum_{s\in S}q(s)log\left(\frac{p(t,s;\theta^{(t)})}{q(s)}\right)=L(\theta^{(t)},q).\label{eq:1.4}
+\end{equation}
+The inequality in Eq. (\ref{eq:1.4}) comes from the concave version
+of Jensen's Inequality and can be attained if and only if for each
+$t$, there is a constant $c_{t}$ such that $\frac{p(t,s;\theta^{(t)})}{q^{(t)}(s)}=c_{t}$
+for all $s\in S.$ If we sum both side over $s\in S$ in the following
+equation, we learn 
+\begin{eqnarray*}
+p(t,s;\theta^{(t)}) & = & c_{t}q^{(t)}(s)\\
+p(t;\theta^{(t)})=\sum_{s\in S}p(t,s;\theta^{(t)}) & = & c_{t}\sum_{s\in S}q^{(t)}(s)=c_{t}
+\end{eqnarray*}
+and hence, 
+\begin{equation}
+q^{(t)}(s)=\frac{p(t,s;\theta^{(t)})}{p(t;\theta^{(t)})}=\frac{p(t,s;\theta^{(t)})}{\sum_{s\in S}p(t,s;\theta^{(t)})}=p(s|t;\theta^{(t)})\label{eq:1.5}
+\end{equation}
+which is known as posterior distribution of $s$ given $t$ and the
+parameters in $\theta^{(t)}$ under $p.$
+
+In the M-Step, by using Eq. (\ref{eq:1.5}), 
+\[
+\theta^{(t+1)}=argmax_{\theta}L(\cdot,q^{(t)})=argmax_{\theta}\sum_{t\in T}\sum_{s\in S}p(t|s;\theta^{(t)})log\left(\frac{p(t,s;\theta)}{p(t|s;\theta^{(t)})}\right).
+\]
+Then gradient descent method, Newtonian method or solving critial
+points explicitly is applied to find $\theta^{(t+1)}$ in M-Step.
+
+Why EM algorithm can find at least a local maximum point? It is because
+of the monotonic property of $L(\theta^{(t)},q^{(t)})$ in the EM
+algorithm. Indeed, it can be verified that $L(\theta^{(t)},q^{(t)})\leq L(\theta^{(t)},q^{(t+1)})\leq L(\theta^{(t+1)},q^{(t+1)})$
+where the first inequality comes from E-Step and the second inequality
+comes from M-Step.
+
+Same as most optimization scheme, EM algorithm usually falls at local
+optimal point. In order to get a better optimal point, one suggestion
+is to repeat EM algorithm multiple times by using different initialization
+of $\theta.$ 
+
+\section{Bone Yard}
+
+Will answer several things in future? (1) Why cannot use stochastic
+gradient descent directly? (2) Study how to use EM alg on a Guassian
+mixture model?
+\end{document}
